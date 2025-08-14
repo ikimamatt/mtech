@@ -78,6 +78,37 @@ Route::get('test-html', function() {
     return '<h1>Test HTML Route</h1><p>Jika Anda melihat ini, route berfungsi!</p>';
 })->name('test.html');
 
+// Test route untuk melihat data laptop mentah dari database
+Route::get('test-laptop-data', function() {
+    $laptops = \App\Models\Admin\Inventory\Laptop::select('id', 'name', 'user_name', 'serial_number')->limit(5)->get();
+    return response()->json([
+        'message' => 'Data Laptop dari Database',
+        'data' => $laptops,
+        'count' => $laptops->count()
+    ]);
+})->name('test.laptop.data');
+
+// Test route untuk melihat data yang dikirim ke view laptops
+Route::get('test-laptop-view-data', function() {
+    $query = \App\Models\Admin\Inventory\Laptop::with('getDeviceBrands', 'region');
+    $datas = $query->orderBy('created_at', 'desc')->get();
+    
+    return response()->json([
+        'message' => 'Data yang Dikirim ke View Laptops',
+        'data' => $datas->map(function($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'user_name' => $item->user_name,
+                'serial_number' => $item->serial_number,
+                'getDeviceBrands' => $item->getDeviceBrands,
+                'region' => $item->region
+            ];
+        }),
+        'count' => $datas->count()
+    ]);
+})->name('test.laptop.view.data');
+
 Route::get('/dashboard', function () {
     $computers = Computer::count();
     $laptops = Laptop::count();

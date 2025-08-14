@@ -102,7 +102,7 @@
                                     <td>{{ $data->getDeviceBrands?->name ?? 'Tidak ada' }}</td>
                                     <td>{{ $data->name }}</td>
                                     <td>{{ $data->spesification }}</td>
-                                    <td>{{ $data->user_name }}</td>
+                                    <td>{{ $data->user_name ?? 'Tidak ada' }}</td>
                                     <td>{{ $data->serial_number }}</td>
                                     <td>{{ $data->ip_address }}</td>
                                     <td>{{ $data->region->nama_region ?? 'Tidak ada' }}</td>
